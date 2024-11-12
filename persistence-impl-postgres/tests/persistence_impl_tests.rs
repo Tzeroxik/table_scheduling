@@ -59,8 +59,10 @@ mod configuration {
         }
     }
 
-    pub fn load_configurations(filename: &str,
-                               format: FileFormat) -> Result<DatabaseSettings, config::ConfigError> {
+    pub fn load_configurations(
+        filename: &str,
+        format: FileFormat
+    ) -> Result<DatabaseSettings, config::ConfigError> {
         let file: File<FileSourceFile, FileFormat> =
             config::File::new(filename, format);
 
