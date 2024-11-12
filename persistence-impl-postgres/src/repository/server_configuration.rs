@@ -1,22 +1,24 @@
-use database::Database;
-
 use persistence_interface::dto::server_configuration_repository::{
     ServerConfiguration,
-    ServerConfigurationRepository
+    ServerConfigurationRepository,
 };
 
-use sqlx::{database, Pool, Postgres};
+use sqlx::{Pool, Postgres};
 
 pub struct PostgresServerConfigurationRepository {
     connection_pool: Pool<Postgres>,
 }
 
-impl ServerConfigurationRepository<Postgres> for PostgresServerConfigurationRepository {
-    async fn get_server_configuration_by_id(&self, id: i64) -> Result<ServerConfiguration, sqlx::error::Error> {
-        sqlx::query_as!(
-            ServerConfiguration,
-            "SELECT * FROM server_configuration WHERE id = $1",
-            id
-        ).fetch_one(&self.connection_pool).await
+impl PostgresServerConfigurationRepository {
+    pub fn from_connection_pool(connection_pool: Pool<Postgres>) -> impl ServerConfigurationRepository {
+        PostgresServerConfigurationRepository { connection_pool }
+    }
+}
+
+impl ServerConfigurationRepository for PostgresServerConfigurationRepository {
+    async fn get_server_configuration(&self) -> Result<ServerConfiguration, sqlx::error::Error> {
+        sqlx::query_as!(ServerConfiguration,"SELECT * FROM server_configuration WHERE id = 1")
+            .fetch_one(&self.connection_pool)
+            .await
     }
 }

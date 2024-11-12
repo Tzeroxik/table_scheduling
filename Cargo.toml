@@ -1,0 +1,3 @@
+[workspace]
+members = ["persistence-impl-postgres", "persistence-interface", "server"]
+resolver = "2"
