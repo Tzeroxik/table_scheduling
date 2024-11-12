@@ -19,7 +19,8 @@ async fn get_connection_pool() -> PgPool {
 async fn test_get_server_configuration() {
     let pool = get_connection_pool().await;
     
-    let repository = PostgresServerConfigurationRepository::from_connection_pool(pool);
+    let repository = 
+        PostgresServerConfigurationRepository::from_connection_pool(pool);
 
     let configuration =
         repository
