@@ -1,13 +1,5 @@
-use serde::{Deserialize, Serialize};
+use crate::dto::ServerConfiguration;
 use std::future::Future;
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ServerConfiguration {
-    pub id: i64,
-    pub name: String,
-    pub port: String,
-    pub https: bool,
-}
 
 pub trait ServerConfigurationRepository {
     fn get_server_configuration(

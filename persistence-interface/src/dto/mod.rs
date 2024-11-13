@@ -1,7 +1,8 @@
-use crate::dto::migration::Migration;
-use crate::dto::server_configuration::ServerConfigurationRepository;
+use serde::{Deserialize, Serialize};
 
-pub mod migration;
-pub mod server_configuration;
-
-pub trait DatabaseOperations: ServerConfigurationRepository + Migration {}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ServerConfiguration {
+    pub id: i64,
+    pub name: String,
+    pub port: String,
+}

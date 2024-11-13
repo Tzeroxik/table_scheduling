@@ -1,10 +1,11 @@
-use persistence_interface::dto::migration::{Migration, MigrationError};
-use persistence_interface::dto::server_configuration::{
-    ServerConfiguration, ServerConfigurationRepository,
-};
-use persistence_interface::dto::DatabaseOperations;
-use sqlx::{query, query_as, Executor, PgPool};
+use persistence_interface::migration::{Migration, MigrationError};
+use persistence_interface::repository::server_configuration_repository::{ServerConfigurationRepository};
 
+use sqlx::{query, query_as, Executor, PgPool};
+use persistence_interface::DatabaseOperations;
+use persistence_interface::dto::ServerConfiguration;
+
+#[derive(Debug, Clone)]
 pub struct PostgresDatabaseOperations {
     connection_pool: PgPool,
 }

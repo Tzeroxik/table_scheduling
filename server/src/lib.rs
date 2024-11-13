@@ -1,8 +1,6 @@
 use config::FileFormat;
 use persistence_impl_postgres::PostgresDatabaseOperations;
-use persistence_interface::dto::migration::Migration;
-use persistence_interface::dto::server_configuration::ServerConfigurationRepository;
-use persistence_interface::dto::DatabaseOperations;
+use persistence_interface::DatabaseOperations;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -28,13 +26,9 @@ impl Settings {
     }
 }
 
-pub async fn run(connection_string: &str) {
-    let db_operation = init_database_operations(connection_string).await;
-}
-
 pub async fn init_database_operations(
     connection_string: &str,
-) -> impl DatabaseOperations + Migration + ServerConfigurationRepository {
+) -> impl DatabaseOperations {
     PostgresDatabaseOperations::from_con_str(connection_string)
         .await
         .expect("failed to initialize database")

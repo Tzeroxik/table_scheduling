@@ -2,14 +2,14 @@
 mod tests {
     use crate::connection;
     use persistence_impl_postgres::PostgresDatabaseOperations;
-    use persistence_interface::dto::migration::Migration;
-    use persistence_interface::dto::server_configuration::ServerConfigurationRepository;
+    use persistence_interface::migration::Migration;
+    use persistence_interface::repository::server_configuration_repository::ServerConfigurationRepository;
 
     #[tokio::test]
     async fn test_get_server_configuration() {
         let pool = connection::get_connection_pool().await;
 
-        let configuration: impl ServerConfigurationRepository =
+        let configuration =
             PostgresDatabaseOperations::new(pool)
                 .get_server_configuration()
                 .await
@@ -22,9 +22,9 @@ mod tests {
     async fn test_migration() {
         let pool = connection::get_connection_pool().await;
 
-        let operations: impl Migration = PostgresDatabaseOperations::new(pool);
+        let operations = PostgresDatabaseOperations::new(pool);
 
-        let migration = operations.migrate("./sql/schema.sql").await;
+        let migration = operations.migrate("../sql/schema.sql").await;
 
         match migration {
             Err(e) => panic!("{e:?}"),
