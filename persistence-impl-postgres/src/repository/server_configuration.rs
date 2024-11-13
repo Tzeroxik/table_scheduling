@@ -17,7 +17,7 @@ impl PostgresServerConfigurationRepository {
 
 impl ServerConfigurationRepository for PostgresServerConfigurationRepository {
     async fn get_server_configuration(&self) -> Result<ServerConfiguration, sqlx::error::Error> {
-        sqlx::query_as!(ServerConfiguration,"SELECT * FROM server_configuration WHERE id = 1")
+        sqlx::query_as!(ServerConfiguration, "SELECT * FROM server_configuration WHERE id = 1")
             .fetch_one(&self.connection_pool)
             .await
     }

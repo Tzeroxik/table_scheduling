@@ -1,5 +1,5 @@
-host: "127.0.0.1"
-port: 5432
+host: "ip"
+port: port
 username: "username"
 password: "password"
 database_name: "database_name"

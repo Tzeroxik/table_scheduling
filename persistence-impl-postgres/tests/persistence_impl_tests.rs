@@ -3,13 +3,12 @@ use persistence_impl_postgres::repository::server_configuration::PostgresServerC
 use persistence_interface::dto::server_configuration_repository::ServerConfigurationRepository;
 use sqlx::PgPool;
 
-
 async fn get_connection_pool() -> PgPool {
     let settings = configuration::load_configurations(
-        "./tests/database.yaml", 
-        FileFormat::Yaml
+        "./tests/database.yaml",
+        FileFormat::Yaml,
     ).expect("Failed to load configurations.yml");
-    
+
     PgPool::connect(&settings.connection_string())
         .await
         .expect("Failed to connect to Postgres")
@@ -18,8 +17,8 @@ async fn get_connection_pool() -> PgPool {
 #[tokio::test]
 async fn test_get_server_configuration() {
     let pool = get_connection_pool().await;
-    
-    let repository = 
+
+    let repository =
         PostgresServerConfigurationRepository::from_connection_pool(pool);
 
     let configuration =
@@ -32,8 +31,8 @@ async fn test_get_server_configuration() {
 }
 
 mod configuration {
-    use serde::Deserialize;
     use config::{Config, File, FileFormat, FileSourceFile};
+    use serde::Deserialize;
 
     #[derive(Debug, Deserialize, Clone)]
     pub struct DatabaseSettings {
@@ -61,7 +60,7 @@ mod configuration {
 
     pub fn load_configurations(
         filename: &str,
-        format: FileFormat
+        format: FileFormat,
     ) -> Result<DatabaseSettings, config::ConfigError> {
         let file: File<FileSourceFile, FileFormat> =
             config::File::new(filename, format);
