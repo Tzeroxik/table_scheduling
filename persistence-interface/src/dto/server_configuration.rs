@@ -5,6 +5,8 @@ use std::future::Future;
 pub struct ServerConfiguration {
     pub id: i64,
     pub name: String,
+    pub port: String,
+    pub https: bool,
 }
 
 pub trait ServerConfigurationRepository {

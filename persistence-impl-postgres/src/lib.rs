@@ -22,8 +22,6 @@ impl PostgresDatabaseOperations {
     }
 }
 
-impl DatabaseOperations for PostgresDatabaseOperations {}
-
 impl Migration for PostgresDatabaseOperations {
     async fn migrate(&self, path: &str) -> Result<u64, MigrationError> {
         let query_str = match std::fs::read_to_string(path) {
@@ -50,3 +48,5 @@ impl ServerConfigurationRepository for PostgresDatabaseOperations {
         .await
     }
 }
+
+impl DatabaseOperations for PostgresDatabaseOperations {}
