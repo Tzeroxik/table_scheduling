@@ -5,9 +5,10 @@ use std::future::Future;
 pub struct ServerConfiguration {
     pub id: i64,
     pub name: String,
-    pub active: bool,
 }
 
 pub trait ServerConfigurationRepository {
-    fn get_server_configuration(&self) -> impl Future<Output=Result<ServerConfiguration, sqlx::error::Error>>;
+    fn get_server_configuration(
+        &self,
+    ) -> impl Future<Output = Result<ServerConfiguration, sqlx::error::Error>>;
 }

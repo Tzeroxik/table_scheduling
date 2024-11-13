@@ -10,4 +10,20 @@ path = "src/lib.rs"
 path = "src/main.rs"
 name = "server"
 
+[dependencies.persistence-interface]
+path = "../persistence-interface"
+[dependencies.persistence-impl-postgres]
+path = "../persistence-impl-postgres"
+
 [dependencies]
+actix-web = "4.9.0"
+log = "0.4.22"
+config = "0.14"
+
+[dependencies.serde]
+version = "1.0.215"
+features = ["derive"]
+
+[dependencies.tokio]
+version = "1.41.0"
+features = ["macros", "rt-multi-thread"]

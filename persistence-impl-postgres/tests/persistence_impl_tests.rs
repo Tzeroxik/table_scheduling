@@ -1,35 +1,53 @@
-use config::FileFormat;
-use persistence_impl_postgres::repository::server_configuration::PostgresServerConfigurationRepository;
-use persistence_interface::dto::server_configuration_repository::ServerConfigurationRepository;
-use sqlx::PgPool;
+#[cfg(test)]
+mod tests {
+    use crate::connection;
+    use persistence_impl_postgres::PostgresDatabaseOperations;
+    use persistence_interface::dto::migration::Migration;
+    use persistence_interface::dto::server_configuration::ServerConfigurationRepository;
 
-async fn get_connection_pool() -> PgPool {
-    let settings = configuration::load_configurations(
-        "./tests/database.yaml",
-        FileFormat::Yaml,
-    ).expect("Failed to load configurations.yml");
+    #[tokio::test]
+    async fn test_get_server_configuration() {
+        let pool = connection::get_connection_pool().await;
 
-    PgPool::connect(&settings.connection_string())
-        .await
-        .expect("Failed to connect to Postgres")
+        let configuration: impl ServerConfigurationRepository =
+            PostgresDatabaseOperations::new(pool)
+                .get_server_configuration()
+                .await
+                .expect("Failed to get server configuration");
+
+        println!("{configuration:?}");
+    }
+
+    #[tokio::test]
+    async fn test_migration() {
+        let pool = connection::get_connection_pool().await;
+
+        let operations: impl Migration = PostgresDatabaseOperations::new(pool);
+
+        let migration = operations.migrate("./sql/schema.sql").await;
+
+        match migration {
+            Err(e) => panic!("{e:?}"),
+            Ok(rows_affected) => assert_eq!(rows_affected, 0u64),
+        }
+    }
 }
 
-#[tokio::test]
-async fn test_get_server_configuration() {
-    let pool = get_connection_pool().await;
+mod connection {
+    use crate::configuration;
+    use config::FileFormat;
+    use sqlx::PgPool;
 
-    let repository =
-        PostgresServerConfigurationRepository::from_connection_pool(pool);
+    pub async fn get_connection_pool() -> PgPool {
+        let settings =
+            configuration::load_configurations("./tests/database.yaml", FileFormat::Yaml)
+                .expect("Failed to load ./tests/database.yaml");
 
-    let configuration =
-        repository
-            .get_server_configuration()
+        PgPool::connect(&settings.connection_string())
             .await
-            .expect("Failed to get server configuration");
-
-    println!("{configuration:?}");
+            .expect("Failed to connect to Postgres")
+    }
 }
-
 mod configuration {
     use config::{Config, File, FileFormat, FileSourceFile};
     use serde::Deserialize;
@@ -62,8 +80,7 @@ mod configuration {
         filename: &str,
         format: FileFormat,
     ) -> Result<DatabaseSettings, config::ConfigError> {
-        let file: File<FileSourceFile, FileFormat> =
-            config::File::new(filename, format);
+        let file: File<FileSourceFile, FileFormat> = config::File::new(filename, format);
 
         Config::builder()
             .add_source(file)

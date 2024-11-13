@@ -1,3 +1,4 @@
+db_type: "database_type"
 host: "ip"
 port: port
 username: "username"

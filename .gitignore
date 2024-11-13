@@ -1,5 +1,6 @@
 .env
 persistence-impl-postgres/tests/*.yaml
+server/resources/app.yaml
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/rust,intellij+all,rust-analyzer

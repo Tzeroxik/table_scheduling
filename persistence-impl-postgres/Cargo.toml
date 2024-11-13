@@ -21,6 +21,10 @@ features = [
     "migrate"
 ]
 
+[dependencies.serde]
+version = "1.0.215"
+features = ["derive"]
+
 [dev-dependencies]
 config = "0.14.1"
 
@@ -28,5 +32,4 @@ config = "0.14.1"
 version = "1.41.1"
 default-features = false
 features = ["macros", "rt-multi-thread"]
-[dependencies]
-serde = { version = "1.0.215", features = ["derive"] }
+
