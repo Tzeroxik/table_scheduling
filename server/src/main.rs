@@ -5,7 +5,6 @@ use persistence_interface::repository::server_configuration_repository::ServerCo
 use server::{init_database_operations, Settings};
 use std::net::TcpListener;
 
-
 #[tokio::main]
 async fn main() {
     let settings = Settings::read("./server/resources/app.yaml");

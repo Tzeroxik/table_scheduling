@@ -1,9 +1,9 @@
 use persistence_interface::migration::{Migration, MigrationError};
-use persistence_interface::repository::server_configuration_repository::{ServerConfigurationRepository};
+use persistence_interface::repository::server_configuration_repository::ServerConfigurationRepository;
 
-use sqlx::{query, query_as, Executor, PgPool};
-use persistence_interface::DatabaseOperations;
 use persistence_interface::dto::ServerConfiguration;
+use persistence_interface::DatabaseOperations;
+use sqlx::{query, query_as, Executor, PgPool};
 
 #[derive(Debug, Clone)]
 pub struct PostgresDatabaseOperations {
@@ -43,10 +43,9 @@ impl ServerConfigurationRepository for PostgresDatabaseOperations {
     async fn get_server_configuration(&self) -> Result<ServerConfiguration, sqlx::error::Error> {
         query_as!(
             ServerConfiguration,
-            r#"SELECT * FROM server_configuration WHERE id = 1"#
-        )
-        .fetch_one(&self.connection_pool)
-        .await
+            r"SELECT * FROM server_configuration WHERE id = 1"
+        ).fetch_one(&self.connection_pool)
+            .await
     }
 }
 
